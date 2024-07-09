@@ -1,22 +1,19 @@
-use std::io::Write;
+use std::{
+    fs::OpenOptions,
+    io::{self, Write},
+};
 
-pub fn make_cmd_add(filename: String, task: String) {
+pub fn make_cmd_add(filename: String, task: String) -> io::Result<()> {
     if task.is_empty() {
-        return;
+        return Ok(());
     }
 
-    if let Ok(mut file) = std::fs::OpenOptions::new()
+    let mut file = OpenOptions::new()
         .create(true)
         .append(true)
-        .open(filename)
-    {
-        if let Err(e) = writeln!(file, "{}", task) {
-            eprintln!("Error: {}", e);
-            return;
-        }
+        .open(filename)?;
 
-        println!("Task added: {}", task);
-    } else {
-        eprintln!("Error: Unable to open or create file.");
-    }
+    writeln!(file, "{}", task)?;
+    println!("Task added: {}", task);
+    Ok(())
 }

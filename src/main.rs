@@ -49,7 +49,7 @@ fn main() {
             cmd_list::make_cmd_list(filename);
         }
         Commands::Add { task } => {
-            cmd_add::make_cmd_add(filename, task.join(" "));
+            let _ = cmd_add::make_cmd_add(filename, task.join(" "));
         }
         Commands::Update { index, task } => {
             println!("Update: {} {}", index, task.join(" "));
