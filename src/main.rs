@@ -75,13 +75,13 @@ mod tests {
 
     #[test]
     fn test_list() {
-        let mut cmd = Command::cargo_bin("todo-rs").unwrap();
+        let mut cmd = Command::cargo_bin("todo").unwrap();
         cmd.arg("list").assert().success().stdout("List\n");
     }
 
     #[test]
     fn test_add() {
-        let mut cmd = Command::cargo_bin("todo-rs").unwrap();
+        let mut cmd = Command::cargo_bin("todo").unwrap();
         cmd.args(["add", "new todo"])
             .assert()
             .success()
@@ -90,7 +90,7 @@ mod tests {
 
     #[test]
     fn test_update() {
-        let mut cmd = Command::cargo_bin("todo-rs").unwrap();
+        let mut cmd = Command::cargo_bin("todo").unwrap();
         cmd.args(["update", "1", "updated todo"])
             .assert()
             .success()
@@ -99,7 +99,7 @@ mod tests {
 
     #[test]
     fn test_delete() {
-        let mut cmd = Command::cargo_bin("todo-rs").unwrap();
+        let mut cmd = Command::cargo_bin("todo").unwrap();
         cmd.args(["delete", "1"])
             .assert()
             .success()
@@ -108,7 +108,7 @@ mod tests {
 
     #[test]
     fn test_done() {
-        let mut cmd = Command::cargo_bin("todo-rs").unwrap();
+        let mut cmd = Command::cargo_bin("todo").unwrap();
         cmd.args(["done", "1"])
             .assert()
             .success()
@@ -117,7 +117,7 @@ mod tests {
 
     #[test]
     fn test_undone() {
-        let mut cmd = Command::cargo_bin("todo-rs").unwrap();
+        let mut cmd = Command::cargo_bin("todo").unwrap();
         cmd.args(["undone", "1"])
             .assert()
             .success()
@@ -126,7 +126,7 @@ mod tests {
 
     #[test]
     fn test_sort() {
-        let mut cmd = Command::cargo_bin("todo-rs").unwrap();
+        let mut cmd = Command::cargo_bin("todo").unwrap();
         cmd.arg("sort").assert().success().stdout("Sort\n");
     }
 }
