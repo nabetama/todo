@@ -8,3 +8,6 @@ assert_cmd = "2.0.14"
 assert_fs = "1.1.1"
 clap = {version = "4.5.9", features = ["derive"]}
 dirs = "5.0.1"
+
+[dev-dependencies]
+serial_test = "*"

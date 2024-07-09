@@ -46,7 +46,7 @@ fn main() {
 
     match args.command {
         Commands::List => {
-            cmd_list::make_cmd_list(filename);
+            cmd_list::make_cmd_list(&filename);
         }
         Commands::Add { task } => {
             let _ = cmd_add::make_cmd_add(filename, task.join(" "));
@@ -71,26 +71,9 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use assert_cmd::Command;
 
-    #[test]
-    fn test_list() {
-        let mut cmd = Command::cargo_bin("todo").unwrap();
-        cmd.arg("list")
-            .assert()
-            .success()
-            .stdout("No tasks found.\n");
-    }
-
-    #[test]
-    fn test_add() {
-        let mut cmd = Command::cargo_bin("todo").unwrap();
-        cmd.args(["add", "new todo"])
-            .assert()
-            .success()
-            .stdout("Add: new todo\n");
-    }
+    pub mod common;
 
     #[test]
     fn test_update() {
