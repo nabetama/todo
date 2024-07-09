@@ -12,7 +12,10 @@ pub fn make_cmd_add(filename: String, task: String) {
     {
         if let Err(e) = writeln!(file, "{}", task) {
             eprintln!("Error: {}", e);
+            return;
         }
+
+        println!("Task added: {}", task);
     } else {
         eprintln!("Error: Unable to open or create file.");
     }
