@@ -2,50 +2,32 @@ use std::{
     fs::File,
     io::{self, BufRead, BufReader, Lines},
     path::Path,
-    sync::Arc,
 };
-
-use crate::command::Command;
 
 const DONE_MARK_1: &str = "☐";
 const DONE_MARK_2: &str = "☑";
 
-pub fn make_cmd_list(filename: String) -> Command {
-    let filename = Arc::new(filename);
+pub fn make_cmd_list(filename: String) {
+    let mut todo = Vec::new();
+    let mut index = 1;
 
-    let cmd_list = {
-        let filename = Arc::clone(&filename);
+    if let Ok(lines) = read_lines(&*filename) {
+        for line in lines.map_while(Result::ok) {
+            todo.push((index, line));
+            index += 1;
+        }
+    }
 
-        move || {
-            let mut todo = Vec::new();
-            let mut index = 1;
-
-            if let Ok(lines) = read_lines(&*filename) {
-                for line in lines.map_while(Result::ok) {
-                    todo.push((index, line));
-                    index += 1;
-                }
-            }
-
-            if todo.is_empty() {
-                println!("No tasks found.");
+    if todo.is_empty() {
+        println!("No tasks found.");
+    } else {
+        for (index, task) in todo {
+            if let Some(task) = task.strip_prefix('-') {
+                println!("{} {:03} {}", DONE_MARK_2, index, task);
             } else {
-                for (index, task) in todo {
-                    if let Some(task) = task.strip_prefix('-') {
-                        println!("{} {:03} {}", DONE_MARK_2, index, task);
-                    } else {
-                        println!("{} {:03} {}", DONE_MARK_1, index, task);
-                    }
-                }
+                println!("{} {:03} {}", DONE_MARK_1, index, task);
             }
         }
-    };
-
-    Command {
-        run: Box::new(cmd_list),
-        usage_line: "Usage: todo list",
-        short: "List all tasks",
-        flag: "-l",
     }
 }
 

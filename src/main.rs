@@ -1,8 +1,8 @@
 use clap::{Parser, Subcommand};
 use std::env;
 
+mod cmd_add;
 mod cmd_list;
-mod command;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -14,7 +14,7 @@ struct Cli {
 #[derive(Subcommand, Debug)]
 enum Commands {
     List,
-    Add { value: Vec<String> },
+    Add { task: Vec<String> },
     Update { index: u8, task: Vec<String> },
     Delete { index: u8 },
     Done { index: u8 },
@@ -46,11 +46,10 @@ fn main() {
 
     match args.command {
         Commands::List => {
-            let cmd = cmd_list::make_cmd_list(filename);
-            cmd.dispatch();
+            cmd_list::make_cmd_list(filename);
         }
-        Commands::Add { value } => {
-            println!("Add: {}", value.join(" "));
+        Commands::Add { task } => {
+            cmd_add::make_cmd_add(filename, task.join(" "));
         }
         Commands::Update { index, task } => {
             println!("Update: {} {}", index, task.join(" "));
