@@ -46,7 +46,7 @@ mod tests {
     use super::*;
 
     use crate::tests::common::{
-        create_test_file, delete_test_file, get_test_file_path, read_fiel_to_string,
+        create_test_file, delete_test_file, get_test_file_path, read_file_to_string,
     };
 
     const TEST_FILE: &str = ".todo_test";
@@ -79,7 +79,7 @@ mod tests {
         });
 
         assert!(output.is_ok());
-        assert_eq!(read_fiel_to_string(&filename), TASK_1);
+        assert_eq!(read_file_to_string(&filename), TASK_1);
 
         delete_test_file(&filename);
     }
@@ -104,7 +104,7 @@ mod tests {
 
         assert!(output.is_ok());
         assert_eq!(
-            read_fiel_to_string(&filename),
+            read_file_to_string(&filename),
             format!("{}\n{}\n{}", TASK_1, TASK_2, TASK_3)
         );
 

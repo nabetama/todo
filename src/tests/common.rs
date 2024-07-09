@@ -28,7 +28,7 @@ pub fn delete_test_file(filename: &String) {
     }
 }
 
-pub fn read_fiel_to_string(filename: &String) -> String {
+pub fn read_file_to_string(filename: &String) -> String {
     let mut file = File::open(filename).expect("Unable to open test file");
     let mut contents = String::new();
     file.read_to_string(&mut contents)

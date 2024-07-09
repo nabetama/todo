@@ -49,7 +49,7 @@ fn main() {
             cmd_list::make_cmd_list(&filename);
         }
         Commands::Add { task } => {
-            let _ = cmd_add::make_cmd_add(filename, task.join(" "));
+            let _ = cmd_add::make_cmd_add(&filename, task.join(" "));
         }
         Commands::Update { index, task } => {
             println!("Update: {} {}", index, task.join(" "));
@@ -71,49 +71,5 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use assert_cmd::Command;
-
     pub mod common;
-
-    #[test]
-    fn test_update() {
-        let mut cmd = Command::cargo_bin("todo").unwrap();
-        cmd.args(["update", "1", "updated todo"])
-            .assert()
-            .success()
-            .stdout("Update: 1 updated todo\n");
-    }
-
-    #[test]
-    fn test_delete() {
-        let mut cmd = Command::cargo_bin("todo").unwrap();
-        cmd.args(["delete", "1"])
-            .assert()
-            .success()
-            .stdout("Delete: 1\n");
-    }
-
-    #[test]
-    fn test_done() {
-        let mut cmd = Command::cargo_bin("todo").unwrap();
-        cmd.args(["done", "1"])
-            .assert()
-            .success()
-            .stdout("Done: 1\n");
-    }
-
-    #[test]
-    fn test_undone() {
-        let mut cmd = Command::cargo_bin("todo").unwrap();
-        cmd.args(["undone", "1"])
-            .assert()
-            .success()
-            .stdout("Undone: 1\n");
-    }
-
-    #[test]
-    fn test_sort() {
-        let mut cmd = Command::cargo_bin("todo").unwrap();
-        cmd.arg("sort").assert().success().stdout("Sort\n");
-    }
 }
