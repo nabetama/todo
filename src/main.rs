@@ -1,6 +1,9 @@
 use clap::{Parser, Subcommand};
 use std::env;
 
+mod cmd_list;
+mod command;
+
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Cli {
@@ -39,13 +42,12 @@ fn main() {
         }
     }
 
-    // println!("Filename: {}", filename);
-
     let args = Cli::parse();
 
     match args.command {
         Commands::List => {
-            println!("List");
+            let cmd = cmd_list::make_cmd_list(filename).run;
+            cmd();
         }
         Commands::Add { value } => {
             println!("Add: {}", value.join(" "));
@@ -76,7 +78,10 @@ mod tests {
     #[test]
     fn test_list() {
         let mut cmd = Command::cargo_bin("todo").unwrap();
-        cmd.arg("list").assert().success().stdout("List\n");
+        cmd.arg("list")
+            .assert()
+            .success()
+            .stdout("No tasks found.\n");
     }
 
     #[test]
