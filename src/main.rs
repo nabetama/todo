@@ -46,8 +46,8 @@ fn main() {
 
     match args.command {
         Commands::List => {
-            let cmd = cmd_list::make_cmd_list(filename).run;
-            cmd();
+            let cmd = cmd_list::make_cmd_list(filename);
+            cmd.dispatch();
         }
         Commands::Add { value } => {
             println!("Add: {}", value.join(" "));

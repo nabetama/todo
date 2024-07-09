@@ -4,3 +4,9 @@ pub struct Command {
     pub short: &'static str,
     pub flag: &'static str,
 }
+
+impl Command {
+    pub fn dispatch(&self) {
+        (self.run)();
+    }
+}
