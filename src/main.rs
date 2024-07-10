@@ -5,11 +5,12 @@ use std::env;
 mod cmd;
 mod cmd_add;
 mod cmd_clean;
+mod cmd_delete;
 mod cmd_list;
 mod cmd_update;
 mod utils;
 
-use crate::cmd::{AddCommand, CleanCommand, ListCommand, UpdateCommand};
+use crate::cmd::{AddCommand, CleanCommand, DeleteCommand, ListCommand, UpdateCommand};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -24,7 +25,7 @@ enum Commands {
     Add { task: Vec<String> },
     Clean,
     Update { index: u8, task: Vec<String> },
-    Delete { index: u8 },
+    Delete { ids: Vec<String> },
     Done { index: u8 },
     Undone { index: u8 },
     Sort,
@@ -62,6 +63,7 @@ fn main() {
             index,
             task: task.join(" "),
         }),
+        Commands::Delete { ids } => Box::new(DeleteCommand { ids }),
         _ => unimplemented!(),
     };
 

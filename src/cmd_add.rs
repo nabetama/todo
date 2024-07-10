@@ -30,12 +30,20 @@ mod tests {
 
     const TEST_FILE: &str = ".todo_test";
 
+    fn setup() -> String {
+        let filename = get_test_file_path(&TEST_FILE.to_string());
+        create_test_file(&filename, "");
+        filename
+    }
+
+    fn teardown(filename: &str) {
+        delete_test_file(&filename.to_string());
+    }
+
     #[test]
     #[serial]
     fn test_make_cmd_add() {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
-
-        create_test_file(&filename, "");
+        let filename = setup();
 
         make_cmd_add(&filename, "Task 1".to_string()).unwrap();
         make_cmd_add(&filename, "Task 2".to_string()).unwrap();
@@ -43,21 +51,18 @@ mod tests {
         let content = read_file_to_string(&filename);
         assert_eq!(content, "Task 1\nTask 2\n");
 
-        delete_test_file(&filename);
+        teardown(&filename);
     }
 
     #[test]
     #[serial]
     fn test_make_cmd_add_empty_task() {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
-
-        create_test_file(&filename, "");
+        let filename = setup();
 
         make_cmd_add(&filename, "".to_string()).unwrap();
-
         let content = read_file_to_string(&filename);
         assert_eq!(content, "");
 
-        delete_test_file(&filename);
+        teardown(&filename);
     }
 }
