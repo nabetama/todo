@@ -1,8 +1,4 @@
-use std::{
-    fs::File,
-    io::{self, BufRead, BufReader, Lines},
-    path::Path,
-};
+use crate::utils::read_lines;
 
 const DONE_MARK_1: &str = "☐";
 const DONE_MARK_2: &str = "☑";
@@ -29,14 +25,6 @@ pub fn make_cmd_list(filename: &String) {
             }
         }
     }
-}
-
-fn read_lines<P>(filename: P) -> io::Result<Lines<BufReader<File>>>
-where
-    P: AsRef<Path>,
-{
-    let file = File::open(filename)?;
-    Ok(BufReader::new(file).lines())
 }
 
 #[cfg(test)]
