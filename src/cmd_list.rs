@@ -19,9 +19,9 @@ pub fn make_cmd_list(filename: &String) {
     } else {
         for (index, task) in todo {
             if let Some(stripped_task) = task.strip_prefix('-') {
-                println!("{} {:03} {}", DONE_MARK_2, index, stripped_task);
+                println!("{} {:03}: {}", DONE_MARK_2, index, stripped_task);
             } else {
-                println!("{} {:03} {}", DONE_MARK_1, index, task);
+                println!("{} {:03}: {}", DONE_MARK_1, index, task);
             }
         }
     }
