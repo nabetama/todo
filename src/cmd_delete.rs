@@ -3,33 +3,38 @@ use std::{fs::OpenOptions, io};
 
 use crate::utils::read_lines;
 
-pub fn make_cmd_update(filename: &String, index: u8, task: &str) -> io::Result<()> {
-    if task.is_empty() {
-        println!("Task cannot be empty");
+pub fn make_cmd_delete(filename: &String, ids: &[String]) -> io::Result<()> {
+    let tmp_file = format!("{}_", filename);
+
+    if ids.is_empty() {
+        println!("Delete [id, ...]");
         return Ok(());
     }
+
+    let ids: Vec<u8> = ids.iter().map(|id| id.parse::<u8>().unwrap_or(0)).collect();
 
     let mut w = OpenOptions::new()
         .create(true)
         .append(true)
-        .open(format!("{}_", filename))?;
+        .open(tmp_file)?;
 
     if let Ok(lines) = read_lines(filename) {
         for (i, line) in lines.map_while(Result::ok).enumerate() {
-            if i + 1 == index as usize {
-                let mut new_task = task.to_string();
+            let mut matched = false;
 
-                if line.starts_with('-') {
-                    new_task = format!("-{}", task);
+            for id in &ids {
+                if i + 1 == *id as usize {
+                    matched = true;
                 }
-                writeln!(w, "{}", new_task)?;
-                println!("Task {:03} updated: {}", i + 1, task);
+            }
+
+            if matched {
+                println!("Task {:03} deleted: {}", i + 1, line);
             } else {
                 writeln!(w, "{}", line)?;
             }
         }
     }
-
     std::fs::remove_file(filename)?;
     std::fs::rename(format!("{}_", filename), filename)
 }
@@ -48,27 +53,42 @@ mod tests {
 
     #[test]
     #[serial]
-    fn test_make_cmd_update_success() {
+    fn test_make_cmd_delete_success() {
         let filename = get_test_file_path(&TEST_FILE.to_string());
 
         create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
 
-        make_cmd_update(&filename, 2, "Task 5").unwrap();
+        make_cmd_delete(&filename, &["2".to_string(), "4".to_string()]).unwrap();
 
         let contents = read_file_to_string(&filename);
-        assert_eq!(contents, "Task 1\n-Task 5\nTask 3\n- Task 4\n");
+        assert_eq!(contents, "Task 1\nTask 3\n");
 
         delete_test_file(&filename);
     }
 
     #[test]
     #[serial]
-    fn test_make_cmd_update_fail_task_is_empty() {
+    fn test_make_cmd_delete_empty_ids() {
         let filename = get_test_file_path(&TEST_FILE.to_string());
 
         create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
 
-        make_cmd_update(&filename, 2, "").unwrap();
+        make_cmd_delete(&filename, &[]).unwrap();
+
+        let contents = read_file_to_string(&filename);
+        assert_eq!(contents, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+
+        delete_test_file(&filename);
+    }
+
+    #[test]
+    #[serial]
+    fn test_make_cmd_delete_invalid_id() {
+        let filename = get_test_file_path(&TEST_FILE.to_string());
+
+        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+
+        make_cmd_delete(&filename, &["a".to_string()]).unwrap();
 
         let contents = read_file_to_string(&filename);
         assert_eq!(contents, "Task 1\n- Task 2\nTask 3\n- Task 4\n");

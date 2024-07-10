@@ -1,5 +1,5 @@
 /// This module contains the command interface and its implementations.
-use crate::{cmd_add, cmd_clean, cmd_list, cmd_update};
+use crate::{cmd_add, cmd_clean, cmd_delete, cmd_list, cmd_update};
 
 pub trait Command {
     fn execute(&self, filename: &str);
@@ -43,5 +43,15 @@ pub struct UpdateCommand {
 impl Command for UpdateCommand {
     fn execute(&self, filename: &str) {
         let _ = cmd_update::make_cmd_update(&filename.to_string(), self.index, &self.task);
+    }
+}
+
+pub struct DeleteCommand {
+    pub ids: Vec<String>,
+}
+
+impl Command for DeleteCommand {
+    fn execute(&self, filename: &str) {
+        let _ = cmd_delete::make_cmd_delete(&filename.to_string(), &self.ids);
     }
 }
