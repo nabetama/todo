@@ -6,9 +6,10 @@ mod cmd;
 mod cmd_add;
 mod cmd_clean;
 mod cmd_list;
+mod cmd_update;
 mod utils;
 
-use crate::cmd::{AddCommand, CleanCommand, ListCommand};
+use crate::cmd::{AddCommand, CleanCommand, ListCommand, UpdateCommand};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -57,6 +58,10 @@ fn main() {
             task: task.join(" "),
         }),
         Commands::Clean => Box::new(CleanCommand),
+        Commands::Update { index, task } => Box::new(UpdateCommand {
+            index,
+            task: task.join(" "),
+        }),
         _ => unimplemented!(),
     };
 

@@ -18,8 +18,8 @@ pub fn make_cmd_list(filename: &String) {
         println!("No tasks found.");
     } else {
         for (index, task) in todo {
-            if let Some(task) = task.strip_prefix('-') {
-                println!("{} {:03} {}", DONE_MARK_2, index, task);
+            if let Some(stripped_task) = task.strip_prefix('-') {
+                println!("{} {:03} {}", DONE_MARK_2, index, stripped_task);
             } else {
                 println!("{} {:03} {}", DONE_MARK_1, index, task);
             }

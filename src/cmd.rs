@@ -1,5 +1,5 @@
 /// This module contains the command interface and its implementations.
-use crate::{cmd_add, cmd_clean, cmd_list};
+use crate::{cmd_add, cmd_clean, cmd_list, cmd_update};
 
 pub trait Command {
     fn execute(&self, filename: &str);
@@ -32,5 +32,16 @@ impl Command for CleanCommand {
         if let Ok(()) = cmd_clean::make_cmd_clean(&filename.to_string()) {
             println!("Tasks cleaned");
         }
+    }
+}
+
+pub struct UpdateCommand {
+    pub index: u8,
+    pub task: String,
+}
+
+impl Command for UpdateCommand {
+    fn execute(&self, filename: &str) {
+        let _ = cmd_update::make_cmd_update(&filename.to_string(), self.index, &self.task);
     }
 }

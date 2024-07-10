@@ -11,7 +11,7 @@ pub fn make_cmd_clean(filename: &String) -> io::Result<()> {
 
     if let Ok(lines) = read_lines(filename) {
         for line in lines.map_while(Result::ok) {
-            if line.strip_prefix('-').is_none() {
+            if !line.starts_with('-') {
                 writeln!(file, "{}", line)?;
             }
         }
