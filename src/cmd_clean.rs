@@ -38,19 +38,27 @@ mod tests {
 
     const TEST_FILE: &str = ".todo_test";
 
+    fn setup() -> String {
+        let filename = get_test_file_path(&TEST_FILE.to_string());
+        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+        filename
+    }
+
+    fn teardown(filename: &str) {
+        delete_test_file(&filename.to_string());
+    }
+
     #[test]
     #[serial]
     fn test_make_cmd_clean_success() {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
-
-        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+        let filename = setup();
 
         make_cmd_clean(&filename).unwrap();
 
         let content = read_file_to_string(&filename);
         assert_eq!(content, "Task 1\nTask 3\n");
 
-        delete_test_file(&filename);
+        teardown(&filename);
     }
 
     #[test]
@@ -59,14 +67,14 @@ mod tests {
         let filename = "/non_exist_dir/test_clean.todo";
         let result = make_cmd_clean(&filename.to_string());
         assert!(result.is_err());
+
+        teardown(&filename);
     }
 
     #[test]
     #[serial]
     fn test_make_cmd_clean_write_error() {
-        let filename = "test_make_cmd_clean_write_error.todo";
-        let contents = "task1\n-task2\ntask3\n-task4\n";
-        create_test_file(&filename.to_string(), contents);
+        let filename = setup();
 
         let temp_filename = format!("{}_", filename);
         let _ = File::create(&temp_filename);
@@ -84,9 +92,7 @@ mod tests {
     #[test]
     #[serial]
     fn test_make_cmd_clean_remove_file_error() {
-        let filename = "test_make_cmd_clean_remove_file_error.todo";
-        let contents = "task1\n-task2\ntask3\n-task4\n";
-        create_test_file(&filename.to_string(), contents);
+        let filename = setup();
 
         let temp_filename = format!("{}_", filename);
         let _ = File::create(&temp_filename);

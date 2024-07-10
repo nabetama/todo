@@ -51,48 +51,52 @@ mod tests {
 
     const TEST_FILE: &str = ".todo_test";
 
+    fn setup() -> String {
+        let filename = get_test_file_path(&TEST_FILE.to_string());
+        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+        filename
+    }
+
+    fn teardown(filename: &str) {
+        delete_test_file(&filename.to_string());
+    }
+
     #[test]
     #[serial]
     fn test_make_cmd_delete_success() {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
-
-        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+        let filename = setup();
 
         make_cmd_delete(&filename, &["2".to_string(), "4".to_string()]).unwrap();
 
         let contents = read_file_to_string(&filename);
         assert_eq!(contents, "Task 1\nTask 3\n");
 
-        delete_test_file(&filename);
+        teardown(&filename);
     }
 
     #[test]
     #[serial]
     fn test_make_cmd_delete_empty_ids() {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
-
-        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+        let filename = setup();
 
         make_cmd_delete(&filename, &[]).unwrap();
 
         let contents = read_file_to_string(&filename);
         assert_eq!(contents, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
 
-        delete_test_file(&filename);
+        teardown(&filename);
     }
 
     #[test]
     #[serial]
     fn test_make_cmd_delete_invalid_id() {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
-
-        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+        let filename = setup();
 
         make_cmd_delete(&filename, &["a".to_string()]).unwrap();
 
         let contents = read_file_to_string(&filename);
         assert_eq!(contents, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
 
-        delete_test_file(&filename);
+        teardown(&filename);
     }
 }

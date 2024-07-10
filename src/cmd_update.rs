@@ -46,33 +46,38 @@ mod tests {
 
     const TEST_FILE: &str = ".todo_test";
 
+    fn setup() -> String {
+        let filename = get_test_file_path(&TEST_FILE.to_string());
+        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+        filename
+    }
+
+    fn teardown(filename: &str) {
+        delete_test_file(&filename.to_string());
+    }
+
     #[test]
     #[serial]
     fn test_make_cmd_update_success() {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
-
-        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
-
+        let filename = setup();
         make_cmd_update(&filename, 2, "Task 5").unwrap();
 
         let contents = read_file_to_string(&filename);
         assert_eq!(contents, "Task 1\n-Task 5\nTask 3\n- Task 4\n");
 
-        delete_test_file(&filename);
+        teardown(&filename);
     }
 
     #[test]
     #[serial]
     fn test_make_cmd_update_fail_task_is_empty() {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
-
-        create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
+        let filename = setup();
 
         make_cmd_update(&filename, 2, "").unwrap();
 
         let contents = read_file_to_string(&filename);
         assert_eq!(contents, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
 
-        delete_test_file(&filename);
+        teardown(&filename);
     }
 }
