@@ -1,8 +1,14 @@
 use clap::{Parser, Subcommand};
+use cmd::Command;
 use std::env;
 
+mod cmd;
 mod cmd_add;
+mod cmd_clean;
 mod cmd_list;
+mod utils;
+
+use crate::cmd::{AddCommand, CleanCommand, ListCommand};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -15,6 +21,7 @@ struct Cli {
 enum Commands {
     List,
     Add { task: Vec<String> },
+    Clean,
     Update { index: u8, task: Vec<String> },
     Delete { index: u8 },
     Done { index: u8 },
@@ -44,29 +51,17 @@ fn main() {
 
     let args = Cli::parse();
 
-    match args.command {
-        Commands::List => {
-            cmd_list::make_cmd_list(&filename);
-        }
-        Commands::Add { task } => {
-            let _ = cmd_add::make_cmd_add(&filename, task.join(" "));
-        }
-        Commands::Update { index, task } => {
-            println!("Update: {} {}", index, task.join(" "));
-        }
-        Commands::Delete { index } => {
-            println!("Delete: {}", index);
-        }
-        Commands::Done { index } => {
-            println!("Done: {}", index);
-        }
-        Commands::Undone { index } => {
-            println!("Undone: {}", index);
-        }
-        Commands::Sort => {
-            println!("Sort");
-        }
-    }
+    let command: Box<dyn Command> = match args.command {
+        Commands::List => Box::new(ListCommand),
+        Commands::Add { task } => Box::new(AddCommand {
+            task: task.join(" "),
+        }),
+        Commands::Clean => Box::new(CleanCommand),
+        _ => unimplemented!(),
+    };
+
+    // todo: error handling
+    command.execute(&filename);
 }
 
 #[cfg(test)]
