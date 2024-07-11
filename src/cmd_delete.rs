@@ -16,7 +16,7 @@ pub fn make_cmd_delete(filename: &String, ids: &[String]) -> io::Result<()> {
     let mut w = OpenOptions::new()
         .create(true)
         .append(true)
-        .open(tmp_file)?;
+        .open(&tmp_file)?;
 
     if let Ok(lines) = read_lines(filename) {
         for (i, line) in lines.map_while(Result::ok).enumerate() {
@@ -36,7 +36,7 @@ pub fn make_cmd_delete(filename: &String, ids: &[String]) -> io::Result<()> {
         }
     }
     std::fs::remove_file(filename)?;
-    std::fs::rename(format!("{}_", filename), filename)
+    std::fs::rename(tmp_file, filename)
 }
 
 #[cfg(test)]

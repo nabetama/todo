@@ -1,11 +1,12 @@
 use clap::{Parser, Subcommand};
-use cmd::Command;
+use cmd::{Command, DoneCommand};
 use std::env;
 
 mod cmd;
 mod cmd_add;
 mod cmd_clean;
 mod cmd_delete;
+mod cmd_done;
 mod cmd_list;
 mod cmd_update;
 mod utils;
@@ -26,7 +27,7 @@ enum Commands {
     Clean,
     Update { index: u8, task: Vec<String> },
     Delete { ids: Vec<String> },
-    Done { index: u8 },
+    Done { ids: Vec<String> },
     Undone { index: u8 },
     Sort,
 }
@@ -64,6 +65,7 @@ fn main() {
             task: task.join(" "),
         }),
         Commands::Delete { ids } => Box::new(DeleteCommand { ids }),
+        Commands::Done { ids } => Box::new(DoneCommand { ids }),
         _ => unimplemented!(),
     };
 
