@@ -3,7 +3,7 @@ use std::{fs::OpenOptions, io};
 
 use crate::utils::read_lines;
 
-pub fn make_cmd_delete(filename: &String, ids: &[String]) -> io::Result<()> {
+pub fn make_cmd_delete(filename: &str, ids: &[String]) -> io::Result<()> {
     let tmp_file = format!("{}_", filename);
 
     if ids.is_empty() {
@@ -52,13 +52,13 @@ mod tests {
     const TEST_FILE: &str = ".todo_test";
 
     fn setup() -> String {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
+        let filename = get_test_file_path(TEST_FILE);
         create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
         filename
     }
 
     fn teardown(filename: &str) {
-        delete_test_file(&filename.to_string());
+        delete_test_file(filename);
     }
 
     #[test]

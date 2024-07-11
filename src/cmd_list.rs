@@ -5,7 +5,7 @@ use crate::utils::read_lines;
 const DONE_MARK_1: &str = "☐";
 const DONE_MARK_2: &str = "☑";
 
-pub fn make_cmd_list(filename: &String) -> io::Result<()> {
+pub fn make_cmd_list(filename: &str) -> io::Result<()> {
     let mut todo = Vec::new();
     let mut index = 1;
 
@@ -44,13 +44,13 @@ mod tests {
     const TEST_FILE: &str = ".todo_test";
 
     fn setup() -> String {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
+        let filename = get_test_file_path(TEST_FILE);
         create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
         filename
     }
 
     fn teardown(filename: &str) {
-        delete_test_file(&filename.to_string());
+        delete_test_file(filename);
     }
 
     #[test]

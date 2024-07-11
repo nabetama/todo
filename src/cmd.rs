@@ -11,7 +11,7 @@ pub struct ListCommand;
 
 impl Command<std::io::Error> for ListCommand {
     fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
-        cmd_list::make_cmd_list(&filename.to_string())
+        cmd_list::make_cmd_list(filename)
     }
 }
 
@@ -21,7 +21,7 @@ pub struct AddCommand {
 
 impl Command<std::io::Error> for AddCommand {
     fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
-        cmd_add::make_cmd_add(&filename.to_string(), self.task.clone())
+        cmd_add::make_cmd_add(filename, &self.task)
     }
 }
 
@@ -29,7 +29,7 @@ pub struct CleanCommand;
 
 impl Command<std::io::Error> for CleanCommand {
     fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
-        cmd_clean::make_cmd_clean(&filename.to_string())
+        cmd_clean::make_cmd_clean(filename)
     }
 }
 
@@ -40,7 +40,7 @@ pub struct UpdateCommand {
 
 impl Command<std::io::Error> for UpdateCommand {
     fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
-        cmd_update::make_cmd_update(&filename.to_string(), self.index, &self.task)
+        cmd_update::make_cmd_update(filename, self.index, &self.task)
     }
 }
 
@@ -50,7 +50,7 @@ pub struct DeleteCommand {
 
 impl Command<std::io::Error> for DeleteCommand {
     fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
-        cmd_delete::make_cmd_delete(&filename.to_string(), &self.ids)
+        cmd_delete::make_cmd_delete(filename, &self.ids)
     }
 }
 

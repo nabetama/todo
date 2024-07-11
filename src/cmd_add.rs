@@ -3,7 +3,7 @@ use std::{
     io::{self, Write},
 };
 
-pub fn make_cmd_add(filename: &String, task: String) -> io::Result<()> {
+pub fn make_cmd_add(filename: &str, task: &str) -> io::Result<()> {
     if task.is_empty() {
         return Ok(());
     }
@@ -31,13 +31,13 @@ mod tests {
     const TEST_FILE: &str = ".todo_test";
 
     fn setup() -> String {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
+        let filename = get_test_file_path(TEST_FILE);
         create_test_file(&filename, "");
         filename
     }
 
     fn teardown(filename: &str) {
-        delete_test_file(&filename.to_string());
+        delete_test_file(filename);
     }
 
     #[test]
@@ -45,8 +45,8 @@ mod tests {
     fn test_make_cmd_add() {
         let filename = setup();
 
-        make_cmd_add(&filename, "Task 1".to_string()).unwrap();
-        make_cmd_add(&filename, "Task 2".to_string()).unwrap();
+        make_cmd_add(&filename, "Task 1").unwrap();
+        make_cmd_add(&filename, "Task 2").unwrap();
 
         let content = read_file_to_string(&filename);
         assert_eq!(content, "Task 1\nTask 2\n");
@@ -59,7 +59,7 @@ mod tests {
     fn test_make_cmd_add_empty_task() {
         let filename = setup();
 
-        make_cmd_add(&filename, "".to_string()).unwrap();
+        make_cmd_add(&filename, "").unwrap();
         let content = read_file_to_string(&filename);
         assert_eq!(content, "");
 
