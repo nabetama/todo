@@ -1,16 +1,17 @@
+use std::error::Error;
+
 /// This module contains the command interface and its implementations.
 use crate::{cmd_add, cmd_clean, cmd_delete, cmd_done, cmd_list, cmd_undone, cmd_update};
 
-pub trait Command {
-    fn execute(&self, filename: &str);
+pub trait Command<E: Error> {
+    fn execute(&self, filename: &str) -> Result<(), E>;
 }
 
 pub struct ListCommand;
 
-impl Command for ListCommand {
-    fn execute(&self, filename: &str) {
-        // Change the type of filename parameter to &str
-        cmd_list::make_cmd_list(&filename.to_string());
+impl Command<std::io::Error> for ListCommand {
+    fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
+        cmd_list::make_cmd_list(&filename.to_string())
     }
 }
 
@@ -18,20 +19,17 @@ pub struct AddCommand {
     pub task: String,
 }
 
-impl Command for AddCommand {
-    fn execute(&self, filename: &str) {
-        let _ = cmd_add::make_cmd_add(&filename.to_string(), self.task.clone());
+impl Command<std::io::Error> for AddCommand {
+    fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
+        cmd_add::make_cmd_add(&filename.to_string(), self.task.clone())
     }
 }
 
 pub struct CleanCommand;
 
-impl Command for CleanCommand {
-    fn execute(&self, filename: &str) {
-        // Change the type of filename parameter to &str
-        if let Ok(()) = cmd_clean::make_cmd_clean(&filename.to_string()) {
-            println!("Tasks cleaned");
-        }
+impl Command<std::io::Error> for CleanCommand {
+    fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
+        cmd_clean::make_cmd_clean(&filename.to_string())
     }
 }
 
@@ -40,9 +38,9 @@ pub struct UpdateCommand {
     pub task: String,
 }
 
-impl Command for UpdateCommand {
-    fn execute(&self, filename: &str) {
-        let _ = cmd_update::make_cmd_update(&filename.to_string(), self.index, &self.task);
+impl Command<std::io::Error> for UpdateCommand {
+    fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
+        cmd_update::make_cmd_update(&filename.to_string(), self.index, &self.task)
     }
 }
 
@@ -50,9 +48,9 @@ pub struct DeleteCommand {
     pub ids: Vec<String>,
 }
 
-impl Command for DeleteCommand {
-    fn execute(&self, filename: &str) {
-        let _ = cmd_delete::make_cmd_delete(&filename.to_string(), &self.ids);
+impl Command<std::io::Error> for DeleteCommand {
+    fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
+        cmd_delete::make_cmd_delete(&filename.to_string(), &self.ids)
     }
 }
 
@@ -60,9 +58,9 @@ pub struct DoneCommand {
     pub ids: Vec<String>,
 }
 
-impl Command for DoneCommand {
-    fn execute(&self, filename: &str) {
-        let _ = cmd_done::make_cmd_done(filename, &self.ids);
+impl Command<std::io::Error> for DoneCommand {
+    fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
+        cmd_done::make_cmd_done(filename, &self.ids)
     }
 }
 
@@ -70,8 +68,8 @@ pub struct UndoneCommand {
     pub ids: Vec<String>,
 }
 
-impl Command for UndoneCommand {
-    fn execute(&self, filename: &str) {
-        let _ = cmd_undone::make_cmd_undone(filename, &self.ids);
+impl Command<std::io::Error> for UndoneCommand {
+    fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
+        cmd_undone::make_cmd_undone(filename, &self.ids)
     }
 }

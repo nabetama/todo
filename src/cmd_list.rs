@@ -1,9 +1,11 @@
+use std::io;
+
 use crate::utils::read_lines;
 
 const DONE_MARK_1: &str = "☐";
 const DONE_MARK_2: &str = "☑";
 
-pub fn make_cmd_list(filename: &String) {
+pub fn make_cmd_list(filename: &String) -> io::Result<()> {
     let mut todo = Vec::new();
     let mut index = 1;
 
@@ -25,6 +27,8 @@ pub fn make_cmd_list(filename: &String) {
             }
         }
     }
+
+    Ok(())
 }
 
 #[cfg(test)]
@@ -54,9 +58,7 @@ mod tests {
     fn test_make_cmd_list_no_tasks() {
         let filename = setup();
 
-        let output = std::panic::catch_unwind(|| {
-            make_cmd_list(&filename);
-        });
+        let output = make_cmd_list(&filename);
 
         assert!(output.is_ok());
 
@@ -68,9 +70,7 @@ mod tests {
     fn test_make_cmd_list_with_tasks() {
         let filename = setup();
 
-        let output = std::panic::catch_unwind(|| {
-            make_cmd_list(&filename);
-        });
+        let output = make_cmd_list(&filename);
 
         assert!(output.is_ok());
         assert_eq!(
@@ -86,9 +86,7 @@ mod tests {
     fn test_make_cmd_list_with_various_tasks() {
         let filename = setup();
 
-        let output = std::panic::catch_unwind(|| {
-            make_cmd_list(&filename);
-        });
+        let output = make_cmd_list(&filename);
 
         assert!(output.is_ok());
         assert_eq!(

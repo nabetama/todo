@@ -15,6 +15,7 @@ pub fn make_cmd_clean(filename: &String) -> io::Result<()> {
                 writeln!(file, "{}", line)?;
             }
         }
+        println!("Tasks cleaned.");
     }
 
     std::fs::remove_file(filename)?;
