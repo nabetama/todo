@@ -1,6 +1,6 @@
-use clap::{Parser, Subcommand};
-use cmd::{Command, DoneCommand};
 use std::env;
+
+use clap::{Parser, Subcommand};
 
 mod cmd;
 mod cmd_add;
@@ -8,10 +8,14 @@ mod cmd_clean;
 mod cmd_delete;
 mod cmd_done;
 mod cmd_list;
+mod cmd_undone;
 mod cmd_update;
 mod utils;
 
-use crate::cmd::{AddCommand, CleanCommand, DeleteCommand, ListCommand, UpdateCommand};
+use crate::cmd::{
+    AddCommand, CleanCommand, Command, DeleteCommand, DoneCommand, ListCommand, UndoneCommand,
+    UpdateCommand,
+};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -28,7 +32,7 @@ enum Commands {
     Update { index: u8, task: Vec<String> },
     Delete { ids: Vec<String> },
     Done { ids: Vec<String> },
-    Undone { index: u8 },
+    Undone { ids: Vec<String> },
     Sort,
 }
 
@@ -66,6 +70,7 @@ fn main() {
         }),
         Commands::Delete { ids } => Box::new(DeleteCommand { ids }),
         Commands::Done { ids } => Box::new(DoneCommand { ids }),
+        Commands::Undone { ids } => Box::new(UndoneCommand { ids }),
         _ => unimplemented!(),
     };
 
