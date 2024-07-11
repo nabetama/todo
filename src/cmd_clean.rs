@@ -83,10 +83,10 @@ mod tests {
         fs::set_permissions(&temp_filename, fs::Permissions::from_mode(0o444))
             .expect("Unable to set permissions");
 
-        let result = make_cmd_clean(&filename.to_string());
+        let result = make_cmd_clean(&filename);
         assert!(result.is_err());
 
-        delete_test_file(&filename.to_string());
+        delete_test_file(&filename);
         delete_test_file(&temp_filename);
     }
 
@@ -101,14 +101,14 @@ mod tests {
         fs::set_permissions(&temp_filename, fs::Permissions::from_mode(0o444))
             .expect("Unable to set permissions");
 
-        let result = make_cmd_clean(&filename.to_string());
+        let result = make_cmd_clean(&filename);
         assert!(result.is_err());
 
         fs::set_permissions(&temp_filename, fs::Permissions::from_mode(0o666))
             .expect("Unable to set permissions");
 
         delete_test_file(&temp_filename);
-        delete_test_file(&filename.to_string());
+        delete_test_file(&filename);
     }
 
     // todo: fix this test.
