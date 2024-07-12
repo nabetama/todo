@@ -54,13 +54,13 @@ mod tests {
     const TEST_FILE: &str = ".todo_test";
 
     fn setup() -> String {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
+        let filename = get_test_file_path(TEST_FILE);
         create_test_file(&filename, "task 1\ntask 2\ntask 3\ntask 4\ntask 5\n");
         filename
     }
 
     fn teardown(filename: &str) {
-        delete_test_file(&filename.to_string());
+        delete_test_file(filename);
     }
 
     #[test]

@@ -58,7 +58,7 @@ fn main() {
 
     let args = Cli::parse();
 
-    let command: Box<dyn Command> = match args.command {
+    let command: Box<dyn Command<std::io::Error>> = match args.command {
         Commands::List => Box::new(ListCommand),
         Commands::Add { task } => Box::new(AddCommand {
             task: task.join(" "),
@@ -74,8 +74,9 @@ fn main() {
         _ => unimplemented!(),
     };
 
-    // todo: error handling
-    command.execute(&filename);
+    if let Err(e) = command.execute(&filename) {
+        eprintln!("{}", e);
+    }
 }
 
 #[cfg(test)]

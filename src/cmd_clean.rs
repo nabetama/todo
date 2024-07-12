@@ -3,7 +3,7 @@ use std::{fs::OpenOptions, io};
 
 use crate::utils::read_lines;
 
-pub fn make_cmd_clean(filename: &String) -> io::Result<()> {
+pub fn make_cmd_clean(filename: &str) -> io::Result<()> {
     let mut file = OpenOptions::new()
         .create(true)
         .append(true)
@@ -15,6 +15,7 @@ pub fn make_cmd_clean(filename: &String) -> io::Result<()> {
                 writeln!(file, "{}", line)?;
             }
         }
+        println!("Tasks cleaned.");
     }
 
     std::fs::remove_file(filename)?;
@@ -39,13 +40,13 @@ mod tests {
     const TEST_FILE: &str = ".todo_test";
 
     fn setup() -> String {
-        let filename = get_test_file_path(&TEST_FILE.to_string());
+        let filename = get_test_file_path(TEST_FILE);
         create_test_file(&filename, "Task 1\n- Task 2\nTask 3\n- Task 4\n");
         filename
     }
 
     fn teardown(filename: &str) {
-        delete_test_file(&filename.to_string());
+        delete_test_file(filename);
     }
 
     #[test]
@@ -65,10 +66,10 @@ mod tests {
     #[serial]
     fn test_make_cmd_clean_open_error() {
         let filename = "/non_exist_dir/test_clean.todo";
-        let result = make_cmd_clean(&filename.to_string());
+        let result = make_cmd_clean(filename);
         assert!(result.is_err());
 
-        teardown(&filename);
+        teardown(filename);
     }
 
     #[test]
@@ -82,10 +83,10 @@ mod tests {
         fs::set_permissions(&temp_filename, fs::Permissions::from_mode(0o444))
             .expect("Unable to set permissions");
 
-        let result = make_cmd_clean(&filename.to_string());
+        let result = make_cmd_clean(&filename);
         assert!(result.is_err());
 
-        delete_test_file(&filename.to_string());
+        delete_test_file(&filename);
         delete_test_file(&temp_filename);
     }
 
@@ -100,14 +101,14 @@ mod tests {
         fs::set_permissions(&temp_filename, fs::Permissions::from_mode(0o444))
             .expect("Unable to set permissions");
 
-        let result = make_cmd_clean(&filename.to_string());
+        let result = make_cmd_clean(&filename);
         assert!(result.is_err());
 
         fs::set_permissions(&temp_filename, fs::Permissions::from_mode(0o666))
             .expect("Unable to set permissions");
 
         delete_test_file(&temp_filename);
-        delete_test_file(&filename.to_string());
+        delete_test_file(&filename);
     }
 
     // todo: fix this test.
