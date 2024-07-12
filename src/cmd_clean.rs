@@ -1,3 +1,4 @@
+use std::fs::{remove_file, rename};
 use std::io::Write;
 use std::{fs::OpenOptions, io};
 
@@ -18,8 +19,8 @@ pub fn make_cmd_clean(filename: &str) -> io::Result<()> {
         println!("Tasks cleaned.");
     }
 
-    std::fs::remove_file(filename)?;
-    std::fs::rename(format!("{}_", filename), filename)
+    remove_file(filename)?;
+    rename(format!("{}_", filename), filename)
 }
 
 #[cfg(test)]

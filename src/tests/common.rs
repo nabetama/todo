@@ -1,6 +1,6 @@
 use std::{
     env,
-    fs::{self, File},
+    fs::{remove_file, File},
     io::{Read, Write},
     path::Path,
 };
@@ -24,7 +24,7 @@ pub fn create_test_file(filename: &str, contents: &str) {
 
 pub fn delete_test_file(filename: &str) {
     if Path::new(&filename).exists() {
-        fs::remove_file(filename).expect("Unable to delete test file");
+        remove_file(filename).expect("Unable to delete test file");
     }
 }
 

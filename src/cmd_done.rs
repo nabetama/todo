@@ -1,3 +1,4 @@
+use std::fs::{remove_file, rename};
 use std::io;
 use std::io::Write;
 
@@ -36,8 +37,8 @@ pub fn make_cmd_done(filename: &str, ids: &[String]) -> io::Result<()> {
             }
         }
     }
-    std::fs::remove_file(filename)?;
-    std::fs::rename(tmp_file, filename)
+    remove_file(filename)?;
+    rename(tmp_file, filename)
 }
 
 #[cfg(test)]
