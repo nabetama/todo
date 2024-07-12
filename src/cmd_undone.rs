@@ -1,3 +1,4 @@
+use std::fs::{remove_file, rename};
 use std::io::Write;
 use std::{fs::OpenOptions, io};
 
@@ -35,8 +36,8 @@ pub fn make_cmd_undone(filename: &str, ids: &[String]) -> io::Result<()> {
             }
         }
     }
-    std::fs::remove_file(filename)?;
-    std::fs::rename(tmp_file, filename)
+    remove_file(filename)?;
+    rename(tmp_file, filename)
 }
 
 #[cfg(test)]

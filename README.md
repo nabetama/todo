@@ -68,6 +68,20 @@ $ todo list
 ☐ 002: Sleeping with cats
 ```
 
+### Sort todo
+
+```
+$ todo list
+☐ 001: Sleeping with cats
+☑ 002: Feeding the cat
+☐ 003: Stroke a cat
+$ todo sort
+$ todo list
+☑ 001: Feeding the cat
+☐ 002: Sleeping with cats
+☐ 003: Stroke a cat
+```
+
 ### Clean all completed todo
 
 ```

@@ -1,7 +1,7 @@
 use std::error::Error;
 
 /// This module contains the command interface and its implementations.
-use crate::{cmd_add, cmd_clean, cmd_delete, cmd_done, cmd_list, cmd_undone, cmd_update};
+use crate::{cmd_add, cmd_clean, cmd_delete, cmd_done, cmd_list, cmd_sort, cmd_undone, cmd_update};
 
 pub trait Command<E: Error> {
     fn execute(&self, filename: &str) -> Result<(), E>;
@@ -71,5 +71,13 @@ pub struct UndoneCommand {
 impl Command<std::io::Error> for UndoneCommand {
     fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
         cmd_undone::make_cmd_undone(filename, &self.ids)
+    }
+}
+
+pub struct SortCommand;
+
+impl Command<std::io::Error> for SortCommand {
+    fn execute(&self, filename: &str) -> Result<(), std::io::Error> {
+        cmd_sort::make_cmd_sort(filename)
     }
 }

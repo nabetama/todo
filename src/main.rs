@@ -8,13 +8,14 @@ mod cmd_clean;
 mod cmd_delete;
 mod cmd_done;
 mod cmd_list;
+mod cmd_sort;
 mod cmd_undone;
 mod cmd_update;
 mod utils;
 
 use crate::cmd::{
-    AddCommand, CleanCommand, Command, DeleteCommand, DoneCommand, ListCommand, UndoneCommand,
-    UpdateCommand,
+    AddCommand, CleanCommand, Command, DeleteCommand, DoneCommand, ListCommand, SortCommand,
+    UndoneCommand, UpdateCommand,
 };
 
 #[derive(Parser, Debug)]
@@ -71,7 +72,7 @@ fn main() {
         Commands::Delete { ids } => Box::new(DeleteCommand { ids }),
         Commands::Done { ids } => Box::new(DoneCommand { ids }),
         Commands::Undone { ids } => Box::new(UndoneCommand { ids }),
-        _ => unimplemented!(),
+        Commands::Sort => Box::new(SortCommand),
     };
 
     if let Err(e) = command.execute(&filename) {
