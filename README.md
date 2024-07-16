@@ -1,6 +1,7 @@
 # todo
 
-A simple command-line todo list written in Rust.
+A simple command-line todo that
+clone of https://github.com/mattn/todo written in Rust.
 
 ## Usage
 
@@ -94,3 +95,26 @@ Tasks cleaned
 $ todo list
 ☐ 001: Sleeping with cats
 ```
+
+## Installation
+
+```sh
+$ cargo install --git https://github.com/nabetama/todo
+$ type -a todo
+todo is /Users/nabetama/.cargo/bin/todo
+```
+
+or build your own.
+
+```sh
+$ git clone git@github.com:nabetama/todo.git
+$ cargo build --release
+```
+
+## LICENSE
+
+Apache License Version 2.0
+
+## Author
+
+Mao Nabeta(@nabetama)
